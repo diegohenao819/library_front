@@ -18,7 +18,7 @@ export const useSearchContext = () => useContext(SearchContext);
 export const SearchProvider = ({ children }: SearchProviderProps) => {
   const [searchQuery, setSearchQuery] = useState('');
 
-  console.log('Provider SearchQuery:', searchQuery);  // Log para verificar el valor de searchQuery en el provider
+  console.log('Provider SearchQuery:', searchQuery); 
 
   return (
     <SearchContext.Provider value={{ searchQuery, setSearchQuery }}>
