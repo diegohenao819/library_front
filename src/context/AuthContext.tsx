@@ -8,6 +8,7 @@ type AuthProviderProps = {
 };
 
 type UserType = {
+    id: number;
   userId: number;
   username: string;
   email: string;

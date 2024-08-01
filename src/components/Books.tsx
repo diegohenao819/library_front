@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { Book, Loan } from "@/lib/types";
 import { useSearchContext } from "@/context/SearchContext";
 
+
 interface BooksProps {
   books: Book[];
 }
@@ -16,7 +17,7 @@ const Books = ({ books }: BooksProps) => {
   const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
   const [loans, setLoans] = useState<Loan[]>([]);
-  const { searchQuery } = useSearchContext();
+  const { searchQuery } = useSearchContext ()!;
 
   useEffect(() => {
     const fetchLoans = async () => {
