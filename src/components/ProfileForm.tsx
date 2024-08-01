@@ -61,9 +61,9 @@ export function ProfileForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>Email: prueba@gmail.com</FormLabel>
               <FormControl>
-                <Input placeholder="example@mail.com" {...field} />
+                <Input placeholder="prueba@gmail.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -74,9 +74,9 @@ export function ProfileForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>Password: abc</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="Password" {...field} />
+                <Input type="password" placeholder="abc" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
