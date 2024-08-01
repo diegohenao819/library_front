@@ -1,5 +1,5 @@
 import React from "react"
-import { ProfileForm } from "@/components/ProfileForm" // Adjust the path to where your ProfileForm component is located
+import { ProfileForm } from "@/components/ProfileForm" 
 
 const LoginPage: React.FC = () => {
   return (

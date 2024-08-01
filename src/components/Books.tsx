@@ -57,7 +57,7 @@ const Books = ({ books }: BooksProps) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ bookId, userId: user.userId, loanDate }), // Asegúrate de usar user.userId
+        body: JSON.stringify({ bookId, userId: user.userId, loanDate }), 
       });
 
       if (!response.ok) {
@@ -93,7 +93,7 @@ const Books = ({ books }: BooksProps) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ bookId, userId: user.userId }), // Asegúrate de usar user.userId
+        body: JSON.stringify({ bookId, userId: user.userId }), 
       });
 
       if (!response.ok) {
