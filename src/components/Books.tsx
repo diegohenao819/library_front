@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "react-toastify";
 import { Book, Loan } from "@/lib/types";
+import { useSearchContext } from "@/context/SearchContext";
 
 interface BooksProps {
   books: Book[];
@@ -15,6 +16,7 @@ const Books = ({ books }: BooksProps) => {
   const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
   const [loans, setLoans] = useState<Loan[]>([]);
+  const { searchQuery } = useSearchContext();
 
   useEffect(() => {
     const fetchLoans = async () => {
@@ -25,6 +27,8 @@ const Books = ({ books }: BooksProps) => {
 
     fetchLoans();
   }, []);
+
+  const filteredBooks = books.filter(book => book.title.toLowerCase().includes(searchQuery.toLowerCase()));
 
   const handleReserve = async (bookId: number) => {
     if (!user) {
@@ -43,7 +47,7 @@ const Books = ({ books }: BooksProps) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ bookId, userId: user.userId, loanDate }),
+        body: JSON.stringify({ bookId, userId: user.id, loanDate }),
       });
 
       if (!response.ok) {
@@ -79,7 +83,7 @@ const Books = ({ books }: BooksProps) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ bookId, userId: user.userId }),
+        body: JSON.stringify({ bookId, userId: user.id }),
       });
 
       if (!response.ok) {
@@ -89,7 +93,7 @@ const Books = ({ books }: BooksProps) => {
       const data = await response.json();
       console.log('Retorno exitoso:', data);
       toast.success('Retorno exitoso');
-      setLoans(loans.filter(loan => loan.bookId !== bookId || loan.userId !== user.userId));
+      setLoans(loans.filter(loan => loan.bookId !== bookId || loan.userId !== user.id));
     } catch (error) {
       console.error('Error retornando el libro:', error);
       setError('Failed to return book');
@@ -100,13 +104,13 @@ const Books = ({ books }: BooksProps) => {
   };
 
   const isBookLoaned = (bookId: number) => {
-    return loans.some(loan => loan.bookId === bookId && loan.userId === user?.userId);
+    return loans.some(loan => loan.bookId === bookId && loan.userId === user?.id);
   };
 
   return (
     <div className="max-w-[800px] mx-auto">
       <ul>
-        {books.map((book) => (
+        {filteredBooks.map((book) => (
           <li key={book.id} className="flex flex-col items-center justify-center">
             <section
               className={cn(

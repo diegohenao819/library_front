@@ -5,6 +5,8 @@ import { useSearchContext } from "@/context/SearchContext";
 const SearchBar = () => {
   const { searchQuery, setSearchQuery } = useSearchContext() as { searchQuery: string, setSearchQuery: (query: string) => void };
 
+  console.log('SearchQuery:', searchQuery);  // Log para verificar el valor de searchQuery
+
   return (
     <input
       type="text"

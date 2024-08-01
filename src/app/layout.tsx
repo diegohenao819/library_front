@@ -20,15 +20,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-     <SearchProvider>
-       <AuthProvider>
-         <body className={inter.className}>
-           {children}
-      
-           <ToastContainer />
-         </body>
-       </AuthProvider>
-     </SearchProvider>
+      <SearchProvider>
+        <AuthProvider>
+          <body className={inter.className}>
+            {children}
+            <ToastContainer />
+          </body>
+        </AuthProvider>
+      </SearchProvider>
     </html>
   );
 }
