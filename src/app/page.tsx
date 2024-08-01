@@ -19,7 +19,7 @@ export default function Home() {
       <div className="w-[30%]">
         <Logo />
         <h1 className="text-4xl font-bold mt-2">
-          Manage your <span className="font-extrabold">LibraryApp</span> reserva con nosotros!
+         <span className="font-extrabold">LibraryApp</span> reserva con nosotros!
         </h1>
         <p className=" mt-2">
         Utiliza LibraryApp para reservar los libros que quieres leer! La lectura es una de las mejores formas de aprender y crecer.
