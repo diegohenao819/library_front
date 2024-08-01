@@ -2,11 +2,20 @@
 
 import { createContext, useContext, useState } from 'react';
 
-const SearchContext = createContext();
+type SearchProviderProps = {
+    children: React.ReactNode;
+    };
+
+type SearchContextProps = {
+    searchQuery: string;
+    setSearchQuery: (query: string) => void;
+};
+
+const SearchContext = createContext<SearchContextProps | null> (null);
 
 export const useSearchContext = () => useContext(SearchContext);
 
-export const SearchProvider = ({ children }) => {
+export const SearchProvider = ({ children }: SearchProviderProps) => {
   const [searchQuery, setSearchQuery] = useState('');
 
   return (

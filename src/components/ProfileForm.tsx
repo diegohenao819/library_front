@@ -24,7 +24,9 @@ export function ProfileForm() {
     },
   });
 
-  const { login } = useAuth();
+  const { login } = useAuth()!;
+
+
   const router = useRouter();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {

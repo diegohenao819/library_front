@@ -3,19 +3,17 @@
 import React, { useEffect, useState } from "react";
 import Books from "@/components/Books";
 import { useAuth } from "@/context/AuthContext";
-
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import SearchBar from "@/components/SearchBar";
+import { Book } from "@/lib/types";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  const { user, logout } = useAuth();
-  const [books, setBooks] = useState([]);
+  const { user, logout } = useAuth()!;
+  const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-    const router = useRouter();
-
-  console.log(user);
+  const [error, setError] = useState<unknown | any>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -29,7 +27,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         const data = await response.json();
         setBooks(data);
       } catch (error) {
-        setError(error.message);
+        setError(error);
       } finally {
         setLoading(false);
       }
@@ -38,25 +36,21 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     fetchBooks();
   }, []);
 
-
-
-
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-
+  if (error) return <div>Error: {error.message}</div>;
 
   const handleLogout = () => {
     logout();
     router.push("/");
+  };
 
-  }
   return (
     <>
-      <nav className="flex w-full justify-end  flex-1 shrink">
+      <nav className="flex w-full justify-end flex-1 shrink">
         <ul className="mt-5 mr-5 gap-8">
-           <Button variant="destructive" onClick={handleLogout} >
-             <li>Log out</li>
-           </Button>
+          <Button variant="destructive" onClick={handleLogout}>
+            <li>Log out</li>
+          </Button>
         </ul>
       </nav>
       <div className="max-w-[500px] flex m-auto mb-8">

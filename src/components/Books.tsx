@@ -4,14 +4,17 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "react-toastify";
-import { useSearchContext } from "@/context/SearchContext"; // Importa el contexto de búsqueda
+import { Book, Loan } from "@/lib/types";
 
-const Books = ({ books }) => {
+interface BooksProps {
+  books: Book[];
+}
+
+const Books = ({ books }: BooksProps) => {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
-  const [loans, setLoans] = useState([]);
-  const { searchQuery } = useSearchContext(); // Obtén la consulta de búsqueda del contexto
+  const [loans, setLoans] = useState<Loan[]>([]);
 
   useEffect(() => {
     const fetchLoans = async () => {
@@ -23,7 +26,7 @@ const Books = ({ books }) => {
     fetchLoans();
   }, []);
 
-  const handleReserve = async (bookId) => {
+  const handleReserve = async (bookId: number) => {
     if (!user) {
       setError('Debes estar autenticado para reservar un libro.');
       return;
@@ -47,7 +50,7 @@ const Books = ({ books }) => {
         throw new Error('Failed to reserve book');
       }
 
-      const data = await response.json();
+      const data: Loan = await response.json();
       console.log('Reserva exitosa:', data);
       toast.success('Reserva exitosa');
       setLoans([...loans, data]);
@@ -60,7 +63,7 @@ const Books = ({ books }) => {
     }
   };
 
-  const handleReturn = async (bookId) => {
+  const handleReturn = async (bookId: number) => {
     if (!user) {
       setError('Debes estar autenticado para retornar un libro.');
       return;
@@ -96,64 +99,54 @@ const Books = ({ books }) => {
     }
   };
 
-  const isBookLoaned = (bookId) => {
+  const isBookLoaned = (bookId: number) => {
     return loans.some(loan => loan.bookId === bookId && loan.userId === user?.userId);
   };
 
-  const filteredBooks = books.filter((book) =>
-    book.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
   return (
-    <div className="max-w-[800px] mx-auto  ">
+    <div className="max-w-[800px] mx-auto">
       <ul>
-        {filteredBooks.map((book) => {
-          return (
-            <li key={book.id} className="flex flex-col items-center justify-center">
-              <section
-                className={cn(
-                  "flex justify-center items-center bg-white border-b  w-full h-[75px] cursor-pointer px-5 text-base gap-3 hover:bg-[#EFF1F2] focus:bg-[#EFF1F2] transition"
-                )}
-              >
-                <Image src={book.image} alt={book.title} width={50} height={50} className="object-fill" />
-               <div className="w-[50%] flex flex-col items-center">
-                 <h2 className="font-bold">{book.title}</h2>
-                 <p className="text-sm">{book.author}</p>
-               </div>
-              
-                <div className="flex justify-end gap-2">
+        {books.map((book) => (
+          <li key={book.id} className="flex flex-col items-center justify-center">
+            <section
+              className={cn(
+                "flex justify-center items-center bg-white border-b w-full h-[75px] cursor-pointer px-5 text-base gap-3 hover:bg-[#EFF1F2] focus:bg-[#EFF1F2] transition"
+              )}
+            >
+              <Image src={book.image} alt={book.title} width={50} height={50} className="object-fill" />
+              <div className="w-[50%] flex flex-col items-center">
+                <h2 className="font-bold">{book.title}</h2>
+                <p className="text-sm">{book.author}</p>
+              </div>
+              <div className="flex justify-end gap-2">
+                <Button 
+                  className="bg-green-800"
+                  onClick={() => handleReserve(book.id)}
+                  disabled={loading || isBookLoaned(book.id)}
+                >
+                  {loading ? 'Reservando...' : 'Reservar'}
+                </Button>
+                {isBookLoaned(book.id) ? (
                   <Button 
-                    className="bg-green-800"
-                    onClick={() => handleReserve(book.id)}
-                    disabled={loading || isBookLoaned(book.id)}
+                    className="" 
+                    onClick={() => handleReturn(book.id)}
+                    disabled={loading}
                   >
-                    {loading ? 'Reservando...' : 'Reservar'}
+                    {loading ? 'Retornando...' : 'Retornar'}
                   </Button>
-                  {isBookLoaned(book.id) ? (
-                    <Button 
-                      className="" 
-                      onClick={() => handleReturn(book.id)}
-                      disabled={loading}
-                    >
-                      {loading ? 'Retornando...' : 'Retornar'}
-                    </Button>
-                  ) :
+                ) : (
                   <Button 
-                      className="invisible" 
-                      onClick={() => handleReturn(book.id)}
-                      disabled
-                    >
-                      Retornar
-                    </Button>
-                 
-               
-
-                  }
-               </div>
-              </section>
-            </li>
-          );
-        })}
+                    className="invisible" 
+                    onClick={() => handleReturn(book.id)}
+                    disabled
+                  >
+                    Retornar
+                  </Button>
+                )}
+              </div>
+            </section>
+          </li>
+        ))}
       </ul>
       {error && <p className="text-red-500">{error}</p>}
     </div>

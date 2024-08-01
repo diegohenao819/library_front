@@ -3,7 +3,7 @@
 import { useSearchContext } from "@/context/SearchContext";
 
 const SearchBar = () => {
-  const { searchQuery, setSearchQuery } = useSearchContext();
+  const { searchQuery, setSearchQuery } = useSearchContext() as { searchQuery: string, setSearchQuery: (query: string) => void };
 
   return (
     <input
