@@ -1,4 +1,4 @@
-"use client";  // Esto asegura que el componente se ejecute en el cliente
+"use client";
 
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
@@ -57,7 +57,7 @@ const Books = ({ books }: BooksProps) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ bookId, userId: user.id, loanDate }),
+        body: JSON.stringify({ bookId, userId: user.userId, loanDate }), // Asegúrate de usar user.userId
       });
 
       if (!response.ok) {
@@ -93,7 +93,7 @@ const Books = ({ books }: BooksProps) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ bookId, userId: user.id }),
+        body: JSON.stringify({ bookId, userId: user.userId }), // Asegúrate de usar user.userId
       });
 
       if (!response.ok) {
@@ -103,7 +103,7 @@ const Books = ({ books }: BooksProps) => {
       const data = await response.json();
       console.log('Retorno exitoso:', data);
       toast.success('Retorno exitoso');
-      setLoans(loans.filter(loan => loan.bookId !== bookId || loan.userId !== user.id));
+      setLoans(loans.filter(loan => loan.bookId !== bookId || loan.userId !== user.userId));
     } catch (error) {
       console.error('Error retornando el libro:', error);
       setError('Failed to return book');
@@ -114,7 +114,7 @@ const Books = ({ books }: BooksProps) => {
   };
 
   const isBookLoaned = (bookId: number) => {
-    return loans.some(loan => loan.bookId === bookId && loan.userId === user?.id);
+    return loans.some(loan => loan.bookId === bookId && loan.userId === user?.userId); // Asegúrate de usar user.userId
   };
 
   return (
